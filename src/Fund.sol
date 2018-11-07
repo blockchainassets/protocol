@@ -607,7 +607,9 @@ contract Fund is DSMath, DBC, Owned, Shares, FundInterface {
     function calculateHighWaterMark()
         public
         pre_cond(sub(now, atLastHighWaterMarkUpdate.timestamp) >= PERFORMANCE_FREQUENCY)
-    {
+    {        
+        // Claim management fee to avoid inaccuracies in performance fee calculation
+        claimManagementFee();
         var (
             gav,
             managementFee,
@@ -618,6 +620,9 @@ contract Fund is DSMath, DBC, Owned, Shares, FundInterface {
             redemptionSharePrice,
             investmentSharePrice
         ) = performCalculations();
+        
+        // Check if management fee is actually reset
+        require(managementFee == 0);
 
         uint highWaterMark = atLastHighWaterMarkUpdate.highWaterMark >= redemptionSharePrice ? atLastHighWaterMarkUpdate.highWaterMark : redemptionSharePrice;
         createShares(owner, feesShareQuantity); // Updates _totalSupply by creating shares allocated to manager
