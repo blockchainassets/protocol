@@ -48,10 +48,8 @@ program
     } = require('../lib/utils/environment/initTestEnvironment');
     const { update } = require('../lib/contracts/prices/transactions/update');
     const { getQuoteToken } = require('../lib/contracts/prices/calls/getQuoteToken');
-    const { getDeployment } = require('../lib/utils/solidity/getDeployment');
     const environment = await initTestEnvironment();
-    const { priceSource, tokens } = await getDeployment(environment);
-    const quoteToken = await getQuoteToken(priceSource, environment);
+    const quoteToken = await getQuoteToken(environment, environment.deployment.priceSource);
     const baseToken = tokens.find((token) => {
       return token.symbol === symbol.toUpperCase();
     });
@@ -61,7 +59,7 @@ program
       createQuantity(quoteToken, value),
     );
 
-    await update(priceSource, [newPrice]);
+    await update(environment, environemnt.deployment.priceSource, [newPrice]);
 
     console.log(`Successfully updated the price for ${symbol}.`);
     process.exit();
