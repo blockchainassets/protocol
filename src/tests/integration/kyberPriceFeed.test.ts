@@ -1,4 +1,4 @@
-import { toFixed } from '@melonproject/token-math';
+import { toFixed, createPrice, createQuantity } from '@melonproject/token-math';
 
 import { initTestEnvironment } from '~/tests/utils/initTestEnvironment';
 import {
@@ -16,6 +16,7 @@ import { updateKyber } from '~/contracts/prices/transactions/updateKyber';
 import { Environment } from '~/utils/environment/Environment';
 import { Contracts } from '~/Contracts';
 import { deployContract } from '~/utils/solidity/deployContract';
+import { setBaseRate } from '~/contracts/exchanges/third-party/kyber/transactions/setBaseRate';
 
 describe('kyber-price-feed', () => {
   const shared: {
@@ -64,10 +65,6 @@ describe('kyber-price-feed', () => {
     expect(isAddress(shared.kyberPriceFeed));
   });
 
-  // it('Update kyber feed', async () => {
-  //   expect();
-  // });
-
   it('Get price', async () => {
     await updateKyber(shared.env, shared.kyberPriceFeed);
     const hasValidMlnPrice = await hasValidPrice(
@@ -76,6 +73,34 @@ describe('kyber-price-feed', () => {
       shared.tokens.mln,
     );
     expect(hasValidMlnPrice).toBe(true);
+
+    const mlnPrice = await getPrice(
+      shared.env,
+      shared.kyberPriceFeed,
+      shared.tokens.mln,
+    );
+
+    expect(toFixed(mlnPrice)).toBe('1.000000');
+  });
+
+  it('Update mln price in reserve', async () => {
+    // const prices = [
+    //   {
+    //     buy: createPrice(
+    //       createQuantity(shared.tokens.mln, 1),
+    //       createQuantity(shared.tokens.weth, 1),
+    //     ),
+    //     sell: createPrice(
+    //       createQuantity(shared.tokens.mln, 1),
+    //       createQuantity(shared.tokens.weth, 1),
+    //     ),
+    //   }
+    // ];
+    // await setBaseRate(shared.env, shared.kyberDeploy.conversionRates, {
+    //   prices,
+    // });
+
+    await updateKyber(shared.env, shared.kyberPriceFeed);
 
     const mlnPrice = await getPrice(
       shared.env,
