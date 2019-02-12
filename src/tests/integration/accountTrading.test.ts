@@ -96,7 +96,7 @@ describe('account-trading', () => {
     expect(activeOrders3[0].sell).toEqual(createQuantity(wethToken, 0.1));
 
     await cancelOrderFromAccountOasisDex(shared.env, matchingMarketAddress, {
-      id: order2.id,
+      id: order2.id.toString(),
     });
 
     const activeOrders4 = await getActiveOasisDexOrders(

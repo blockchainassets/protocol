@@ -1,5 +1,5 @@
 import * as R from 'ramda';
-import web3EthAbi from 'web3-eth-abi';
+import { AbiCoder } from 'web3-eth-abi';
 
 export enum Contracts {
   Accounting = 'Accounting',
@@ -249,9 +249,11 @@ type EventSignatureABIMap = {
 
 export const eventSignatureABIMap: EventSignatureABIMap = allAbis.reduce(
   (carry, [contract, abi]) => {
+    const abiCoder = new AbiCoder();
+
     const events = R.filter(onlyEvents, abi);
     const signatureToEvents = R.map(eventAbi => [
-      web3EthAbi.encodeEventSignature(eventAbi),
+      abiCoder.encodeEventSignature(eventAbi),
       eventAbi,
     ])(events);
     return {

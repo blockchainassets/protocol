@@ -1,4 +1,4 @@
-import * as Eth from 'web3-eth';
+import { Eth } from 'web3-eth';
 import { Address } from '@melonproject/token-math';
 import { UnsignedRawTransaction } from '~/utils/solidity/transactionFactory';
 import { MelonContracts, MelonContractsDraft } from '../deploy/deploySystem';

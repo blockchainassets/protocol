@@ -1,5 +1,5 @@
 import * as R from 'ramda';
-import web3EthAbi from 'web3-eth-abi';
+import { AbiCoder } from 'web3-eth-abi';
 import {
   add,
   Address,
@@ -329,7 +329,7 @@ const transactionFactory: TransactionFactory = <Args, Result>(
     });
 
     const events = receipt.logs.reduce((carry, txLog) => {
-      const eventABI = eventSignatureABIMap[txLog.topics[0]];
+      const eventABI = eventSignatureABIMap[(txLog.topics as string[])[0]];
 
       // Ignore event if not found in eventSignaturesABI map;
       if (!eventABI) {
@@ -338,10 +338,12 @@ const transactionFactory: TransactionFactory = <Args, Result>(
       }
 
       try {
-        const decoded = web3EthAbi.decodeLog(
+        const decoded = new AbiCoder().decodeLog(
           eventABI.inputs,
           txLog.data !== '0x' && txLog.data,
-          eventABI.anonymous ? txLog.topics : txLog.topics.slice(1),
+          eventABI.anonymous
+            ? (txLog.topics as string[])
+            : (txLog.topics.slice(1) as string[]),
         );
         const keys = R.map(R.prop('name'), eventABI.inputs);
         const picked = R.pick(keys, decoded);

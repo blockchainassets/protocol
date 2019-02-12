@@ -1,4 +1,4 @@
-import web3EthAbi from 'web3-eth-abi';
+import { AbiCoder } from 'web3-eth-abi';
 import {
   transactionFactory,
   PrepareArgsFunction,
@@ -9,6 +9,8 @@ import { RegisterExchangeAdapterArgs } from './registerExchangeAdapter';
 
 type UpdateExchangeAdapterArgs = RegisterExchangeAdapterArgs;
 
+const abiCoder = new AbiCoder();
+
 const prepareArgs: PrepareArgsFunction<UpdateExchangeAdapterArgs> = async (
   _,
   { exchange, adapter, takesCustody, sigs }: UpdateExchangeAdapterArgs,
@@ -16,7 +18,7 @@ const prepareArgs: PrepareArgsFunction<UpdateExchangeAdapterArgs> = async (
   `${exchange}`,
   `${adapter}`,
   takesCustody,
-  sigs.map(sig => web3EthAbi.encodeFunctionSignature(sig)),
+  sigs.map(sig => abiCoder.encodeFunctionSignature((sig as any) as string)),
 ];
 
 const updateExchangeAdapter: EnhancedExecute<

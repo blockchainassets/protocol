@@ -1,4 +1,4 @@
-import web3EthAbi from 'web3-eth-abi';
+import { AbiCoder } from 'web3-eth-abi';
 import { Address } from '@melonproject/token-math';
 import {
   transactionFactory,
@@ -15,6 +15,8 @@ export interface RegisterExchangeAdapterArgs {
   sigs: FunctionSignatures[];
 }
 
+const abiCoder = new AbiCoder();
+
 const prepareArgs: PrepareArgsFunction<RegisterExchangeAdapterArgs> = async (
   _,
   { exchange, adapter, takesCustody, sigs }: RegisterExchangeAdapterArgs,
@@ -22,7 +24,7 @@ const prepareArgs: PrepareArgsFunction<RegisterExchangeAdapterArgs> = async (
   `${exchange}`,
   `${adapter}`,
   takesCustody,
-  sigs.map(sig => web3EthAbi.encodeFunctionSignature(sig)),
+  sigs.map(sig => abiCoder.encodeFunctionSignature((sig as any) as string)),
 ];
 
 const registerExchangeAdapter: EnhancedExecute<

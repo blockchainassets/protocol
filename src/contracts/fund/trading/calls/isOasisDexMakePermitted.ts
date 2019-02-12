@@ -1,4 +1,4 @@
-import web3EthAbi from 'web3-eth-abi';
+import { AbiCoder } from 'web3-eth-abi';
 import { QuantityInterface, Address } from '@melonproject/token-math';
 
 import { getContract } from '~/utils/solidity/getContract';
@@ -14,6 +14,7 @@ const isOasisDexMakePermitted = async (
   makerQuantity: QuantityInterface,
   takerQuantity: QuantityInterface,
 ) => {
+  const abiCoder = new AbiCoder();
   const hubAddress = await getHub(environment, tradingContractAddress);
   const { policyManagerAddress, tradingAddress } = await getRoutes(
     environment,
@@ -46,7 +47,9 @@ const isOasisDexMakePermitted = async (
 
   const result = await policyManager.methods
     .preValidate(
-      web3EthAbi.encodeFunctionSignature(FunctionSignatures.makeOrder),
+      abiCoder.encodeFunctionSignature(
+        (FunctionSignatures.makeOrder as any) as string,
+      ),
       [
         tradingAddress.toString(), // orderAddresses[0],
         '0x0000000000000000000000000000000000000000', // orderAddresses[1],

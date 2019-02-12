@@ -5,11 +5,11 @@ export const increaseTime = async (
   seconds: number,
 ) => {
   await new Promise((resolve, reject) => {
-    environment.eth.currentProvider.send(
+    environment.eth.currentProvider.send('evm_increaseTime', [seconds as any])
       {
         id: new Date().getSeconds(),
         jsonrpc: '2.0',
-        method: 'evm_increaseTime',
+        method: ,
         params: [seconds],
       },
       (err, response) => {

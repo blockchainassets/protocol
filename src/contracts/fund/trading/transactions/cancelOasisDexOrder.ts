@@ -68,7 +68,7 @@ const postProcess: PostProcessFunction<
   CancelOasisDexOrderResult
 > = async (_, receipt) => {
   return {
-    id: web3Utils.toDecimal(receipt.events.LogKill.returnValues.id),
+    id: web3Utils.toDecimal(receipt.events.LogKill.returnValues.id).toString(),
   };
 };
 

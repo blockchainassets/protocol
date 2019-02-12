@@ -1,4 +1,4 @@
-import { default as Web3Accounts } from 'web3-eth-accounts';
+import { Accounts } from 'web3-eth-accounts';
 import { Address } from '@melonproject/token-math';
 
 import { testLogger } from '~/tests/utils/testLogger';
@@ -92,7 +92,7 @@ export const initTestEnvironment = async (endpoint?: string) => {
     }. Are you running ganache with the right mnemonic: ${testMnemonic}`,
   );
 
-  const web3Accounts = new Web3Accounts(environment.eth.currentProvider);
+  const web3Accounts = new Accounts(environment.eth.currentProvider);
 
   const signTransaction = (
     unsignedTransaction,

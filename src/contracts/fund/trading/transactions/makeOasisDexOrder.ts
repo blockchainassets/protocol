@@ -128,7 +128,7 @@ const postProcess: PostProcessFunction<
 
   return {
     buy: createQuantity(buyToken, logEntry.returnValues.buy_amt),
-    id: web3Utils.toDecimal(logEntry.returnValues.id),
+    id: web3Utils.toDecimal(logEntry.returnValues.id).toString(),
     maker: logEntry.returnValues.maker,
     matched,
     sell: createQuantity(sellToken, logEntry.returnValues.pay_amt),

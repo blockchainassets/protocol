@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import * as Eth from 'web3-eth';
+import { Eth } from 'web3-eth';
 
 // Websocket could be the problem
 // HTTP is faster, but same error

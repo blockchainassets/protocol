@@ -1,4 +1,4 @@
-import web3EthAbi from 'web3-eth-abi';
+import { AbiCoder } from 'web3-eth-abi';
 import { Address, QuantityInterface } from '@melonproject/token-math';
 
 import { getContract } from '~/utils/solidity/getContract';
@@ -17,6 +17,7 @@ const isTakePermitted = async (
   fillTakerQuantity: QuantityInterface,
   id?: number,
 ) => {
+  const abiCoder = new AbiCoder();
   const hubAddress = await getHub(environment, tradingContractAddress);
   const { policyManagerAddress, tradingAddress } = await getRoutes(
     environment,
@@ -49,7 +50,9 @@ const isTakePermitted = async (
 
   const result = await policyManager.methods
     .preValidate(
-      web3EthAbi.encodeFunctionSignature(FunctionSignatures.takeOrder),
+      abiCoder.encodeFunctionSignature(
+        (FunctionSignatures.takeOrder as any) as string,
+      ),
       [
         '0x0000000000000000000000000000000000000000', // orderAddresses[0],
         tradingAddress.toString(), // orderAddresses[1],

@@ -227,7 +227,7 @@ describe('generalWalkthrough', () => {
     debug(`Made order from account with id ${order2.id}`);
 
     await cancelOrderFromAccountOasisDex(shared.env, matchingMarketAddress, {
-      id: order2.id,
+      id: order2.id.toString(),
     });
 
     debug(`Canceled order from account with id ${order2.id}`);

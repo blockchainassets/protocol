@@ -1,4 +1,4 @@
-import { default as Web3Eth } from 'web3-eth';
+import { Eth } from 'web3-eth';
 import * as R from 'ramda';
 import { string } from 'yup';
 import {
@@ -30,12 +30,11 @@ const checkIpc = endpoint => {
 };
 
 const makeWsProvider = endpoint =>
-  new Web3Eth.providers.WebsocketProvider(endpoint);
+  new Eth.providers.WebsocketProvider(endpoint);
 
-const makeHttpProvider = endpoint =>
-  new Web3Eth.providers.HttpProvider(endpoint);
+const makeHttpProvider = endpoint => new Eth.providers.HttpProvider(endpoint);
 
-const makeIpcProvider = endpoint => new Web3Eth.providers.IpcProvider(endpoint);
+const makeIpcProvider = endpoint => new Eth.providers.IpcProvider(endpoint);
 
 const selectProvider = R.cond([
   [R.startsWith('ws'), makeWsProvider],
@@ -106,7 +105,7 @@ export const constructEnvironment = ({
 
   const provider = givenProvider || constructProvider(endpoint, logger);
 
-  const eth = new Web3Eth(provider);
+  const eth = new Eth(provider);
 
   return {
     deployment,

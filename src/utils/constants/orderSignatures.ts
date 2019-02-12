@@ -1,11 +1,12 @@
-import web3EthAbi from 'web3-eth-abi';
+import { AbiCoder } from 'web3-eth-abi';
 
 function joinSignature(name, argTypes = []) {
   return `${name}(${argTypes.join(',')})`;
 }
 
 function abiEncode(joinedSignature) {
-  return web3EthAbi.encodeFunctionSignature(joinedSignature);
+  const abiCoder = new AbiCoder();
+  return abiCoder.encodeFunctionSignature(joinedSignature);
 }
 
 export const makeOrderSignature = joinSignature('makeOrder', [
