@@ -128,7 +128,7 @@ const isValidSignatureOffChain = async (
   const orderHashHex = orderHashUtils.getOrderHashHex(order);
 
   return signatureUtils.isValidSignatureAsync(
-    environment.eth.currentProvider,
+    environment.eth.currentProvider as any,
     orderHashHex,
     signature,
     (makerAddress || environment.wallet.address).toLowerCase(),
